@@ -34,6 +34,7 @@ public class BoardController extends HttpServlet {
 		catch(Exception e) {
 			//e.printStackTrace();
 			//error page forward
+			//asdsd
 		}
 		
 		
