@@ -1,0 +1,10 @@
+package edu.repository;
+
+import edu.vo.Board;
+
+public class BoardDAO {
+	
+	public void boardInsert(Board b) throws SQLException{
+		
+	}
+}

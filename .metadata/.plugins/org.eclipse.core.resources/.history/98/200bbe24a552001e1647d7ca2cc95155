@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+	document.querySelector("#btn-register").addEventListener("click", function () {
+    if (!document.querySelector("#subject").value) {
+      alert("제목 입력!!");
+      return;
+    } else if (!document.querySelector("#content").value) {
+      alert("내용 입력!!");
+      return;
+    } else {
+      let form = document.querySelector("#form-register");
+      form.setAttribute("action", "/board/register");
+      form.submit();
+    }
+  });
+</script>
+</head>
+<body>
+
+</body>
+</html>

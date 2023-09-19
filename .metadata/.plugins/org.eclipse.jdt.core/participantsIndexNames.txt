@@ -1,0 +1,7 @@
+INDEX VERSION 1.131
+D:\ssafy10th\BackEnd\Servlet\0914_배포\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3528397521.index
+\board1_servlet\src
+D:\ssafy10th\BackEnd\Servlet\0914_배포\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2870129023.index
+\board0_form\src
+D:\ssafy10th\BackEnd\Servlet\0914_배포\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2546614201.index
+\board0_form\src

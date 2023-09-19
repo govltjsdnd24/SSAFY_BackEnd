@@ -1,0 +1,53 @@
+package edu.repository;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+import edu.etc.DBUtil;
+import edu.vo.Board;
+
+public class BoardDAO {
+	//singleton pattern
+	private static BoardDAO instance= new BoardDAO();
+	private BoardDAO() {};
+	public static BoardDAO getInstance() {
+		return instance;
+	}
+	
+	DBUtil dbu= DBUtil.getInstance();
+	public void boardInsert(Board b) throws SQLException{
+		Connection conn= dbu.getConnection();
+		PreparedStatement pstmt = null;
+//		TODO : boardDto의 내용을 board table에 insert 하세요!!!
+		DBUtil dbu=DBUtil.getInstance();
+		try {
+			conn=dbu.getConnection();
+			StringBuffer sb= new StringBuffer();
+			sb.append("insert into board(article_no,user_id, subject ,content,hit,register_time) \n");
+			sb.append(" values (?,?,?,?,?,?) "); 
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setString(1, b.getArticleNo());
+			pstmt.setString(2, b.getUsername());
+			pstmt.setString(3, b.getSubject());
+			pstmt.setString(4, b.getContent());
+			pstmt.setString(5, b.getHit());
+			pstmt.setString(6, b.getRegisterTime());
+			pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbu.close(pstmt);
+			dbu.close(conn);
+		}
+//		END
+	}
+	
+	public List<Board> boardList() throws SQLException {
+		Connection conn= dbu.getConnection();
+		
+		return null;
+	}
+}

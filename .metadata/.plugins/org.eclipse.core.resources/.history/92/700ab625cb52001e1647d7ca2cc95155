@@ -1,0 +1,22 @@
+package edu.repository;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
+import edu.etc.DBUtil;
+import edu.vo.Board;
+
+public class BoardDAO {
+	
+	public void boardInsert(Board b) throws SQLException{
+		Connection conn= DBUtil.getConnection();
+		
+	}
+	
+	public List<Board> boardList() {
+		Connection conn= DBUtil.getConnection();
+		
+		return null;
+	}
+}

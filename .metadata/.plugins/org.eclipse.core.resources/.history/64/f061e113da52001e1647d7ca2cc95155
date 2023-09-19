@@ -1,0 +1,152 @@
+package edu.repository;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.etc.DBUtil;
+import edu.vo.Board;
+
+public class BoardDAO {
+	//singleton pattern
+	private static BoardDAO instance= new BoardDAO();
+	private BoardDAO() {};
+	public static BoardDAO getInstance() {
+		return instance;
+	}
+	
+	DBUtil dbu= DBUtil.getInstance();
+	public void boardInsert(Board b) throws SQLException{
+		Connection conn= dbu.getConnection();
+		PreparedStatement pstmt = null;
+//		TODO : boardDto의 내용을 board table에 insert 하세요!!!
+		DBUtil dbu=DBUtil.getInstance();
+		try {
+			conn=dbu.getConnection();
+			StringBuffer sb= new StringBuffer();
+			sb.append("insert into board(user_id, subject ,content,hit) \n");
+			sb.append(" values (?,?,?,?) "); 
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setString(1, b.getUsername());
+			pstmt.setString(2, b.getSubject());
+			pstmt.setString(3, b.getContent());
+			pstmt.setString(4, b.getHit());
+			pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbu.close(pstmt);
+			dbu.close(conn);
+		}
+//		END
+	}
+	
+	public List<Board> boardList() throws SQLException {
+		List<Board> list = new ArrayList<Board>();
+
+		DBUtil dbu=DBUtil.getInstance();
+		Connection connection=null;
+		ResultSet rs= null;
+		try {
+			connection=dbu.getConnection();
+			StringBuffer sb = new StringBuffer();
+			sb.append("select * from  board \n");
+			Statement statement= connection.createStatement();
+			rs =statement.executeQuery(sb.toString());
+			while(rs.next()) {
+				Board bd=new Board(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6));
+				list.add(bd);
+			}
+		} catch (SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				System.out.println("rollback Error");
+			}
+		} finally {
+			dbu.close(rs);
+			dbu.close(connection);
+		}
+//		END
+		return list;
+		
+	}
+	
+	public Board viewArticle(int articleNo) {
+		Board board = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		DBUtil dbu=DBUtil.getInstance();
+		try {
+			conn = dbu.getConnection();
+			StringBuilder sql = new StringBuilder();
+			sql.append("select article_no, user_id, subject, content, hit, register_time \n");
+			sql.append("from board \n");
+			sql.append("where article_no = ?");
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setInt(1, articleNo);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				board = new Board(rs.getString("article_no"),rs.getString("user_id"),rs.getString("subject"),rs.getString("content"),rs.getString("hit"),rs.getString("register_time"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbu.close(rs, pstmt, conn);
+		}
+		return board;
+	}
+	
+	public void updateHit(int articleNo) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		DBUtil dbu=DBUtil.getInstance();
+		
+		try {
+			conn = dbu.getConnection();
+			StringBuilder sql = new StringBuilder();
+			sql.append("update board \n");
+			sql.append("set hit = hit + 1 \n");
+			sql.append("where article_no = ?");
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setInt(1, articleNo);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbu.close(pstmt, conn);
+		}	
+	}
+	
+	public void deleteArticle(int articleNo) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+//		TODO : board table에서 글번호가 no인 글 정보를 삭제하세요!!!
+		DBUtil dbu=DBUtil.getInstance();
+		try {
+			conn = dbu.getConnection();
+			StringBuffer sb = new StringBuffer();
+			sb.append("delete from board   \n");
+			sb.append(" where article_no = ?  "); 
+			pstmt = conn.prepareStatement(sb.toString());
+			pstmt.setString(1, articleNo+"");
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbu.close(pstmt);
+			dbu.close(conn);
+		}
+//		END
+	}
+	}
+	
+}

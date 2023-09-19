@@ -1,0 +1,8 @@
+package edu.repository;
+
+public class BoardDAO {
+	
+	public void boardInsert(Board b) {
+		
+	}
+}

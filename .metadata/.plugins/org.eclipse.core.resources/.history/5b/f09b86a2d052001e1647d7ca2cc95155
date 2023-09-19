@@ -1,0 +1,44 @@
+package edu.controller;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/board.do")
+public class BoardController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String action= request.getParameter("action");
+		System.out.println(action);
+		if(action!=null) {
+			if(action!=null) {
+				switch(action) {
+				case "writeform":
+					writeform(request,response);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+
+	private void writeform(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		// 1 파라미터 처리
+		
+		// 2 로직 처리
+		
+		// 3 결과 화면처리
+		response.getWriter();
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
+}
