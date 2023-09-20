@@ -7,9 +7,14 @@ import edu.ssafy.dao.BoardDaoImpl;
 import edu.ssafy.dao.BoardDto;
 
 public class BoardServiceImpl implements BoardService{
-	private BoardDao dao;
-	public BoardServiceImpl() {
+	static private BoardDao dao;
+	private static BoardService boardService = new BoardServiceImpl();
+	private BoardServiceImpl() {
 		dao= BoardDaoImpl.getBoardDao();
+	}
+	
+	public static BoardService getBoardService() {
+		return boardService;
 	}
 	@Override
 	public int writeArticle(BoardDto boardDto) {

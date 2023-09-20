@@ -8,8 +8,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-	index.jsp
-	<%response.sendRedirect("board/board_write.jsp"); %>
-	<%-- <jsp:forward page="<%=root%>/board/board_write.jsp"> --%>
+	index.jsp<br/>
+	
+	<li><a href="<%=root %>/board/boardwrite.jsp">회원등록</a></li>
+	<li><a href="<%=root %>/board?action=boardlist">회원리스트</a></li>
+	<li><a href="<%=root %>/member?action=loginform">로그인</a></li>
+
 </body>
 </html>

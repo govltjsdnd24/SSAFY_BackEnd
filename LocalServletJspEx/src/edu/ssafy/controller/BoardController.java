@@ -15,20 +15,42 @@ import edu.ssafy.service.BoardServiceImpl;
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static BoardService service;
+	
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		service=BoardServiceImpl.getBoardService();
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("type/html; charse=utf-8");
+		doGet(request, response);
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		String path="";
+		System.out.println("GET: "+request+" "+response+" " +path);
 		try {
 			if(action.equals("register")) {
 				path=register(request,response);
 				sendRedirect(request,response,path);
 				
-			} else if (action.equals("boardlist")) {
-				//path=boardList(request,response);
+			} else if (action.equals("list")) {
+				path=boardlist(request,response);
 				forward(request,response,path);
-			} else if( action.contentEquals("view")) {
+			} else if( action.equals("view")) {
+				path=view(request,response);
 				forward(request,response,path);
+			}	else if ("modify".equals(action)) {
+				path = modify(request, response);
+				forward(request, response, path);
+			} else if ("delete".equals(action)) {
+//				path = delete(request, response);
+				sendRedirect(request, response, path);
+			} else {
+				sendRedirect(request, response, path);
 			}
 		}
 		catch(Exception e) {
@@ -40,11 +62,7 @@ public class BoardController extends HttpServlet {
 		
 	}
 
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		service=new BoardServiceImpl();
-	}
+	
 	
 
 	private String register(HttpServletRequest request, HttpServletResponse response) {
@@ -63,11 +81,34 @@ public class BoardController extends HttpServlet {
 		return "/board/board_list.jsp";
 	}
 	
-	private void view(HttpServletRequest request, HttpServletResponse response) {
-		
-		
+	private String boardlist(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("here");
+		return "/board/board_list.jsp";
+	}
+	
+	private String view(HttpServletRequest request, HttpServletResponse response) {
+		String articleNo=request.getParameter("articleno");
+		try {
+			BoardDto boardDto= service.viewArticle(Integer.parseInt(articleNo));
+			service.updateHit(Integer.parseInt(articleNo));
+			request.setAttribute("article", boardDto);
+			return "board/view.jsp";
+		} catch(Exception e) {
+			e.printStackTrace();
+			return "index.jsp";
+		}
+	}
+	
+	private String modify(HttpServletRequest request, HttpServletResponse response) {
+		return null;
+		//String 
 		
 	}
+	
+//	private String delete(HttpServletRequest request, HttpServletResponse response) {
+//		
+//		
+//	}
 
 	private void forward(HttpServletRequest request, HttpServletResponse response, String path) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
@@ -80,9 +121,7 @@ public class BoardController extends HttpServlet {
 		response.sendRedirect(request.getContextPath()+path);
 	}
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
+	
 
 	
 }

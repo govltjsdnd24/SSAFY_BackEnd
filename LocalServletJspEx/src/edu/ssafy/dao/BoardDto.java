@@ -3,7 +3,7 @@ package edu.ssafy.dao;
 public class BoardDto {
 
 	private int articleNo;
-	private String userId;
+	public String userId;
 	private String subject;
 	private String content;
 	private int hit;
