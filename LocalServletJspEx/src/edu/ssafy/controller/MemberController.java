@@ -1,7 +1,9 @@
 package edu.ssafy.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -10,7 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import edu.ssafy.dao.BoardDto;
+
 import edu.ssafy.model.MemberDto;
+import edu.ssafy.service.BoardServiceImpl;
 import edu.ssafy.service.MemberService;
 import edu.ssafy.service.MemberServiceImpl;
 
@@ -26,7 +31,6 @@ public class MemberController extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		process(request, response);
 	}
 
@@ -48,9 +52,15 @@ public class MemberController extends HttpServlet {
 				}else if(action.contentEquals("login")){
 					url=login(request,response);
 				} else if(action.equals("logout")) {
-					System.out.println("there");
 					request.getSession().invalidate();
 					url=new String("index.jsp");
+				} else if(action.equals("register")) {
+					url="redirect:";
+					url += register(request, response);
+					
+					url="redirect:/board/board_write.jsp";
+				} else if(action.equals("list")) {
+					url="redirect:/board/board_list.jsp";
 				}
 			}
 			else {
@@ -61,11 +71,14 @@ public class MemberController extends HttpServlet {
 			url="error.jsp";
 		}
 		if(url.startsWith("redirect")) {
+			
 			url=url.substring(url.indexOf(":")+1);
 			url= request.getContextPath()+url;
+			System.out.println(url);
 			response.sendRedirect(url);
 		}
 		else {
+			System.out.println("forward");
 			request.getRequestDispatcher(url).forward(request, response);
 		}
 	}
@@ -99,7 +112,8 @@ public class MemberController extends HttpServlet {
 					}
 				}
 			}
-			session.setAttribute("userinfo",login);
+			session.setAttribute("userId",login.getUserId());
+			session.setAttribute("userName",login.getUserName());
 			System.out.println(login.getUserName());
 			return "redirect:/board?action=list";
 		} else {
@@ -107,6 +121,43 @@ public class MemberController extends HttpServlet {
 			return "index.jsp";
 		}
 		
+	}
+	
+	private String idCheck(HttpServletRequest request, HttpServletResponse response) {
+		String id= request.getParameter("id");
+		if(action.equals("idcheck")) {
+			response.setContentType("text/plain");
+			PrintWriter out =response.getWriter();
+			if(service.idCheck(id)) {
+					out.print("ok");
+					return;
+				}
+				}else {
+					out.print("no");
+					return;
+				}
+		}
+			
+		}
+	}
+	
+	private String register(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		MemberDto memberDto = (MemberDto) session.getAttribute("userinfo");
+		if (memberDto != null) {
+			BoardDto boardDto = new BoardDto();
+			boardDto.setUserId(memberDto.getUserId());
+			boardDto.setSubject(request.getParameter("subject"));
+			boardDto.setContent(request.getParameter("content"));
+			try {
+				BoardServiceImpl.getBoardService().writeArticle(boardDto);
+				return "redirect:${root}/article?action=list";
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "redirect:${root}/index.jsp";
+			}
+		} else
+			return "redirect:${root}/loginform.jsp";
 	}
 	
 	

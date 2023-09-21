@@ -7,9 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class MyHttpServlet
- */
 @WebServlet("/myservlet.do")
 public class MyHttpServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -31,6 +28,11 @@ public class MyHttpServlet extends HttpServlet {
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("doGet");
+		request.getContextPath();
+		request.getServletPath();
+		request.getPathInfo();
+		System.out.println(request.getPathInfo());
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 

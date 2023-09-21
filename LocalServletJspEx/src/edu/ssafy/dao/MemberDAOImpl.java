@@ -42,4 +42,10 @@ public class MemberDAOImpl implements MemberDAO {
 		return null;
 	}
 
+	@Override
+	public boolean idCheck(String id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

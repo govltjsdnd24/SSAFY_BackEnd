@@ -35,7 +35,7 @@ public class BoardController extends HttpServlet {
 		try {
 			if(action.equals("register")) {
 				path=register(request,response);
-				sendRedirect(request,response,path);
+				forward(request,response,path);
 				
 			} else if (action.equals("list")) {
 				path=boardlist(request,response);
@@ -61,8 +61,6 @@ public class BoardController extends HttpServlet {
 		
 		
 	}
-
-	
 	
 
 	private String register(HttpServletRequest request, HttpServletResponse response) {
